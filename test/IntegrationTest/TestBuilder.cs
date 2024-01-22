@@ -1,4 +1,5 @@
 using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
@@ -9,10 +10,14 @@ public class TestBuilder :  WebApplicationFactory<Program>, IAsyncLifetime
 {
     //src/Service1/Dockerfile
     //G:\Projects\INTegrateTestContainer\src\Service1\Dockerfile
+    //src/Service1/Dockerfile
     //WithDockerfileDirectory(@"G:\Projects\INTegrateTestContainer\src\Service1")
-    private readonly IFutureDockerImage _service1Container = new ImageFromDockerfileBuilder()
-        .WithDockerfileDirectory(CommonDirectoryPath.GetGitDirectory(),"src")
-        .WithDockerfile(Path.Combine("Service1","Dockerfile"))
+    
+    public  IContainer  Service1Container ;
+    
+    public readonly IFutureDockerImage Service1Image = new ImageFromDockerfileBuilder()
+        .WithDockerfileDirectory(CommonDirectoryPath.GetSolutionDirectory(), "src/Service1")
+        .WithDockerfile("Dockerfile")
         .WithBuildArgument("ASPNETCORE_ENVIRONMENT", "Test")
         .WithName("service1")
         .WithDeleteIfExists(true)
@@ -21,14 +26,22 @@ public class TestBuilder :  WebApplicationFactory<Program>, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        Console.WriteLine($" ===> {CommonDirectoryPath.GetSolutionDirectory().DirectoryPath}\\src\\Service1");
-        await _service1Container.CreateAsync().ConfigureAwait(false);
+        await Service1Image.CreateAsync();
+        Service1Container = new ContainerBuilder()
+            .WithImage(Service1Image)
+            .WithPortBinding(8000,80)
+            .Build();
+
+        await Service1Container.StartAsync();
+        
     }
 
     public async Task DisposeAsync()
     {
-        await _service1Container.DisposeAsync();
+        await Service1Container.DisposeAsync();
+        await Service1Image.DisposeAsync();
     }
-    
+
+
     
 }
