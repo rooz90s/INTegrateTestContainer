@@ -49,10 +49,6 @@
               "target": "Package",
               "version": "[17.1.0, )"
             },
-            "TestContainers.Container.Abstractions": {
-              "target": "Package",
-              "version": "[1.5.4, )"
-            },
             "Testcontainers": {
               "target": "Package",
               "version": "[3.7.0, )"

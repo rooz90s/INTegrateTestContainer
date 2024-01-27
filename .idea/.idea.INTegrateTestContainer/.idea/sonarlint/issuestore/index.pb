@@ -13,3 +13,5 @@ Q
 !test/IntegrationTest/UnitTest2.cs,4\6\46147781c12754a68e9dbe919d5057c29e00e2db
 T
 $test/IntegrationTest/TestBuilder2.cs,e\c\ec9849b9df49a393a251b5b99192e07c5b63aafb
+[
++test/IntegrationTest/IntegrationTest.csproj,6\1\61fd55e3c97a2e5d79dca776092d1cd4ac6bf607
